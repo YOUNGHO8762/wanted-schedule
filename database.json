@@ -7,16 +7,40 @@
       "id": 1
     },
     {
-      "day": "Monday",
-      "startTime": "1:00",
-      "endTime": "1:40",
+      "day": "Tuesday",
+      "startTime": "0:00",
+      "endTime": "0:40",
       "id": 2
     },
     {
       "day": "Wednesday",
-      "startTime": "1:00",
-      "endTime": "1:40",
+      "startTime": "0:00",
+      "endTime": "0:40",
       "id": 3
+    },
+    {
+      "day": "Thursday",
+      "startTime": "0:00",
+      "endTime": "0:40",
+      "id": 4
+    },
+    {
+      "day": "Friday",
+      "startTime": "0:00",
+      "endTime": "0:40",
+      "id": 5
+    },
+    {
+      "day": "Saturday",
+      "startTime": "0:00",
+      "endTime": "0:40",
+      "id": 6
+    },
+    {
+      "day": "Sunday",
+      "startTime": "0:00",
+      "endTime": "0:40",
+      "id": 7
     }
   ]
 }

@@ -12,8 +12,6 @@ export default function AddClassSchedule() {
   const [time, setTime] = useState({ hour: '00', minute: '00', meridiem: 'AM' });
   const [days, setDays] = useState<Days[]>([]);
 
-  console.log(time, days);
-
   const navigate = useNavigate();
 
   const handleTimeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -54,32 +52,29 @@ export default function AddClassSchedule() {
         const includeEnteredStartTimes = [...currentStartTimes, enteredStartTime];
         const sortedStartTimes = includeEnteredStartTimes.sort(compareTime);
         const enteredStartTimeIndex = sortedStartTimes.indexOf(enteredStartTime);
-        [1, 2, 3];
+
         if (
           sortedStartTimes[enteredStartTimeIndex - 1] === enteredStartTime ||
           sortedStartTimes[enteredStartTimeIndex + 1] === enteredStartTime
         ) {
           result = true;
-          console.log('시간이 같음');
           return;
         }
         if (sortedStartTimes[enteredStartTimeIndex - 1]) {
           if (
-            convertTimeToNumber(sortedStartTimes[enteredStartTimeIndex - 1]) + 40 >
+            convertTimeToNumber(calculateEndTime(sortedStartTimes[enteredStartTimeIndex - 1])) >
             convertTimeToNumber(enteredStartTime)
           ) {
             result = true;
-            console.log('앞이 겹침');
             return;
           }
         }
         if (sortedStartTimes[enteredStartTimeIndex + 1]) {
           if (
-            convertTimeToNumber(sortedStartTimes[enteredStartTimeIndex - 1]) - 40 <
-            convertTimeToNumber(enteredStartTime)
+            convertTimeToNumber(sortedStartTimes[enteredStartTimeIndex - 1]) <
+            convertTimeToNumber(calculateEndTime(enteredStartTime))
           ) {
             result = true;
-            console.log('뒤가 겹침');
             return;
           }
         }
@@ -105,7 +100,7 @@ export default function AddClassSchedule() {
       days.map((day) => {
         checkSchedule(day, startTime).then((response) => {
           if (response) {
-            alert(`${day}에는 중복되는 시간이 있습니다!`);
+            alert(`${day}에 중복되는 시간이 있습니다!`);
             return;
           }
           fetch(SCHEDULES_API, {
