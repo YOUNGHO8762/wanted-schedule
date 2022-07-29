@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Class } from '../../interfaces/types';
+import { convert24hourTo12HourFormat } from '../../utils/util';
 
 interface Props {
   classData: Class;
@@ -9,9 +10,9 @@ interface Props {
 export default function ClassCard({ classData, onDeleteClick }: Props) {
   return (
     <Container>
-      <Time>{classData.startTime} - </Time>
+      <Time>{convert24hourTo12HourFormat(classData.startTime)} - </Time>
       <DeleteButton onClick={() => onDeleteClick(classData.id)}>X</DeleteButton>
-      <Time>{classData.endTime}</Time>
+      <Time>{convert24hourTo12HourFormat(classData.endTime)}</Time>
     </Container>
   );
 }

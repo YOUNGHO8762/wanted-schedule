@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { SCHEDULES_API } from '../../constant/constants';
 import { Days, Class } from '../../interfaces/types';
+import { compareStartTime } from '../../utils/util';
 import ClassCard from './ClassCard';
 
 interface Props {
@@ -14,7 +15,10 @@ export default function DailySchedule({ day }: Props) {
   const getSchedules = () => {
     fetch(`${SCHEDULES_API}?day=${day}`)
       .then((response) => response.json())
-      .then((json) => setClasses(json));
+      .then((json) => {
+        const sortedClasses = json.sort(compareStartTime);
+        setClasses(sortedClasses);
+      });
   };
 
   useEffect(() => {
