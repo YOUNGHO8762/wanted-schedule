@@ -1,6 +1,6 @@
 export interface Schedule {
   id: number;
-  day: string;
+  day: Days;
   startTime: string;
   endTime: string;
 }
