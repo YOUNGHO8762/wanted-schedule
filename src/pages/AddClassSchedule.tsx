@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { DAYS, SCHEDULES_API } from '../constant/constants';
-import { Class, Days, Meridiem } from '../interfaces/types';
+import { Schedule, Days, Meridiem } from '../interfaces/types';
 import styled from 'styled-components';
 import Title from '../components/common/Title';
 import ClickButton from '../components/common/ClickButton';
@@ -43,43 +43,57 @@ export default function AddClassSchedule() {
     setTime({ ...time, meridiem: enteredMeridiem });
   };
 
-  const checkSchedule = async (day: Days, enteredStartTime: string) => {
-    let result = false;
-    await fetch(`${SCHEDULES_API}?day=${day}`)
+  const checkValidTime = () => {
+    const isValidTime = (time.hour === '11' && time.minute !== '00') || (time.hour === '12' && time.meridiem === 'PM');
+    return isValidTime;
+  };
+
+  const sendScheduleToServer = async (startTime: string) => {
+    await Promise.all(
+      days.map((day) => {
+        fetch(SCHEDULES_API, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            day,
+            startTime,
+            endTime: calculateEndTime(startTime),
+          }),
+        });
+      }),
+    );
+
+    navigate('/');
+  };
+
+  const checkSchedulesOverlap = (Schedules: Schedule[], enteredStartTime: string) => {
+    const overlappedSchedules = Schedules.filter(
+      (schedule: Schedule) =>
+        (days.includes(schedule.day as Days) && schedule.startTime === enteredStartTime) ||
+        (days.includes(schedule.day as Days) &&
+          convertTimeToNumber(calculateEndTime(schedule.startTime)) > convertTimeToNumber(enteredStartTime)) ||
+        (days.includes(schedule.day as Days) &&
+          convertTimeToNumber(schedule.startTime) > convertTimeToNumber(calculateEndTime(enteredStartTime))),
+    );
+
+    const isSchedulesOverlapped = !!overlappedSchedules.length;
+
+    return isSchedulesOverlapped;
+  };
+
+  const scheduleRegistration = async (enteredStartTime: string) => {
+    await fetch(SCHEDULES_API)
       .then((response) => response.json())
       .then((json) => {
-        const currentStartTimes = json.map((data: Class) => data.startTime);
-        const includeEnteredStartTimes = [...currentStartTimes, enteredStartTime];
-        const sortedStartTimes = includeEnteredStartTimes.sort(compareTime);
-        const enteredStartTimeIndex = sortedStartTimes.indexOf(enteredStartTime);
-
-        if (
-          sortedStartTimes[enteredStartTimeIndex - 1] === enteredStartTime ||
-          sortedStartTimes[enteredStartTimeIndex + 1] === enteredStartTime
-        ) {
-          result = true;
+        if (checkSchedulesOverlap(json, enteredStartTime)) {
+          alert('중복되는 시간이 있습니다!');
           return;
         }
-        if (sortedStartTimes[enteredStartTimeIndex - 1]) {
-          if (
-            convertTimeToNumber(calculateEndTime(sortedStartTimes[enteredStartTimeIndex - 1])) >
-            convertTimeToNumber(enteredStartTime)
-          ) {
-            result = true;
-            return;
-          }
-        }
-        if (sortedStartTimes[enteredStartTimeIndex + 1]) {
-          if (
-            convertTimeToNumber(sortedStartTimes[enteredStartTimeIndex - 1]) <
-            convertTimeToNumber(calculateEndTime(enteredStartTime))
-          ) {
-            result = true;
-            return;
-          }
-        }
+
+        sendScheduleToServer(enteredStartTime);
       });
-    return result;
   };
 
   const handleSubmit = async () => {
@@ -88,7 +102,7 @@ export default function AddClassSchedule() {
       return;
     }
 
-    if ((time.hour === '11' && time.minute !== '00') || (time.hour === '12' && time.meridiem === 'PM')) {
+    if (checkValidTime()) {
       alert('23시 까지만 선택이 가능합니다!');
       return;
     }
@@ -96,28 +110,7 @@ export default function AddClassSchedule() {
     const hourTo24 = time.meridiem === 'AM' ? String(+time.hour) : String(+time.hour + 12);
     const startTime = `${hourTo24}:${time.minute}`;
 
-    await Promise.all(
-      days.map((day) => {
-        checkSchedule(day, startTime).then((response) => {
-          if (response) {
-            alert(`${day}에 중복되는 시간이 있습니다!`);
-            return;
-          }
-          fetch(SCHEDULES_API, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              day,
-              startTime,
-              endTime: calculateEndTime(startTime),
-            }),
-          });
-          navigate('/');
-        });
-      }),
-    );
+    await scheduleRegistration(startTime);
   };
 
   const isAMSelected = time.meridiem === 'AM';

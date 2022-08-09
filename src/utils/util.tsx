@@ -1,4 +1,4 @@
-import { Class } from '../interfaces/types';
+import { Schedule } from '../interfaces/types';
 
 export const convert24hourTo12HourFormat = (time: string) => {
   let [hour, minute] = time.split(':');
@@ -22,8 +22,6 @@ export const calculateEndTime = (startTime: string) => {
 
   minute = String(+minute + 40);
 
-  console.log(minute);
-
   if (+minute >= 60) {
     hour = String(+hour + 1);
     minute = String(+minute - 60);
@@ -38,7 +36,7 @@ export const calculateEndTime = (startTime: string) => {
   return endTime;
 };
 
-export const compareStartTime = (a: Class, b: Class) => {
+export const compareStartTime = (a: Schedule, b: Schedule) => {
   if (convertTimeToNumber(a.startTime) < convertTimeToNumber(b.startTime)) {
     return -1;
   }

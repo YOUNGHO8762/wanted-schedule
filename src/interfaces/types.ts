@@ -1,4 +1,4 @@
-export interface Class {
+export interface Schedule {
   id: number;
   day: string;
   startTime: string;
