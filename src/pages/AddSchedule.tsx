@@ -4,7 +4,7 @@ import { Schedule, Days, Meridiem } from '../interfaces/types';
 import styled from 'styled-components';
 import Title from '../components/common/Title';
 import ClickButton from '../components/common/ClickButton';
-import SelectButton from '../components/common//SelectButton';
+import SelectButton from '../components/common/SelectButton';
 import { useNavigate } from 'react-router-dom';
 import { calculateEndTime, convertTimeToNumber } from '../utils/util';
 
