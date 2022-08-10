@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import ClickButton from '../components/common/ClickButton';
-import Scheduler from '../components/ClassSchedule/Scheduler';
+import Scheduler from '../components/Schedule/Scheduler';
 import Title from '../components/common/Title';
 
 export default function ClassSchedule() {

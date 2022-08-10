@@ -1,15 +1,15 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import NavigationBar from '../components/NavigationBar';
-import ClassSchedule from '../pages/ClassSchedule';
-import AddClassSchedule from '../pages/AddClassSchedule';
+import Schedule from '../pages/Schedule';
+import AddSchedule from '../pages/AddSchedule';
 
 export default function Router() {
   return (
     <BrowserRouter>
       <NavigationBar />
       <Routes>
-        <Route path="/" element={<ClassSchedule />} />
-        <Route path="/addClassSchedule" element={<AddClassSchedule />} />
+        <Route path="/" element={<Schedule />} />
+        <Route path="/addClassSchedule" element={<AddSchedule />} />
       </Routes>
     </BrowserRouter>
   );

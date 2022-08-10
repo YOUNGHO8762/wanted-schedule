@@ -6,7 +6,7 @@ import Title from '../components/common/Title';
 import ClickButton from '../components/common/ClickButton';
 import SelectButton from '../components/common//SelectButton';
 import { useNavigate } from 'react-router-dom';
-import { calculateEndTime, compareTime, convertTimeToNumber } from '../utils/util';
+import { calculateEndTime, convertTimeToNumber } from '../utils/util';
 
 export default function AddClassSchedule() {
   const [time, setTime] = useState({ hour: '00', minute: '00', meridiem: 'AM' });

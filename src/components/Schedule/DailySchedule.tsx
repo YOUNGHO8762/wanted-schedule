@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { SCHEDULES_API } from '../../constant/constants';
-import { Days, Class } from '../../interfaces/types';
+import { Days, Schedule } from '../../interfaces/types';
 import { compareStartTime } from '../../utils/util';
-import ClassCard from './ClassCard';
+import ScheduleCard from './ScheduleCard';
 
 interface Props {
   day: Days;
 }
 
 export default function DailySchedule({ day }: Props) {
-  const [classes, setClasses] = useState<Class[]>([]);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
 
   const getSchedules = () => {
     fetch(`${SCHEDULES_API}?day=${day}`)
       .then((response) => response.json())
       .then((json) => {
         const sortedClasses = json.sort(compareStartTime);
-        setClasses(sortedClasses);
+        setSchedules(sortedClasses);
       });
   };
 
@@ -39,8 +39,8 @@ export default function DailySchedule({ day }: Props) {
   return (
     <Container>
       <Day>{day}</Day>
-      {classes.map((classData: Class) => (
-        <ClassCard key={classData.id} classData={classData} onDeleteClick={handleDeleteClick} />
+      {schedules.map((schedule: Schedule) => (
+        <ScheduleCard key={schedule.id} schedule={schedule} onDeleteClick={handleDeleteClick} />
       ))}
     </Container>
   );
