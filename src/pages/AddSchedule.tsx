@@ -73,9 +73,8 @@ export default function AddClassSchedule() {
       (schedule: Schedule) =>
         (days.includes(schedule.day as Days) && schedule.startTime === enteredStartTime) ||
         (days.includes(schedule.day as Days) &&
-          convertTimeToNumber(calculateEndTime(schedule.startTime)) > convertTimeToNumber(enteredStartTime)) ||
-        (days.includes(schedule.day as Days) &&
-          convertTimeToNumber(schedule.startTime) > convertTimeToNumber(calculateEndTime(enteredStartTime))),
+          convertTimeToNumber(enteredStartTime) > convertTimeToNumber(schedule.startTime) &&
+          convertTimeToNumber(enteredStartTime) < convertTimeToNumber(calculateEndTime(schedule.startTime))),
     );
 
     const isSchedulesOverlapped = !!overlappedSchedules.length;

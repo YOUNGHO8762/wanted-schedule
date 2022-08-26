@@ -41,6 +41,18 @@
       "startTime": "0:00",
       "endTime": "0:40",
       "id": 7
+    },
+    {
+      "day": "Monday",
+      "startTime": "23:00",
+      "endTime": "23:40",
+      "id": 8
+    },
+    {
+      "day": "Monday",
+      "startTime": "18:00",
+      "endTime": "18:40",
+      "id": 9
     }
   ]
 }
